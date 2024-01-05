@@ -4,11 +4,13 @@ const ses = new AWS.SES();
 exports.sendEmail = async (event) => {
   const params = {
     Source: "esaldana@bluepeople.com",
-    Destination: {ToAddresses: ["esaldana@bluepeople.com"]},
+    Destination: {ToAddresses: ["relizalde@bluepeople.com"]},
     Message: {
-      Subject: {Data: "Your Subject Here"},
+      Subject: {Data: "versión inicial..."},
       Body: {
-        Html: {Data: '<p>Your email content with <a href="http://example.com">hyperlink</a>.</p>'},
+        Html: {
+          Data: '<p>Hola, favor de dar click <a href="https://sites.google.com/bluepeople.com/bluesite">aquí</a>.</p>',
+        },
       },
     },
   };

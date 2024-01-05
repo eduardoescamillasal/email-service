@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/email-api-service/dev/1704483594347-2024-01-05T19:39:54.347Z/email-api-service.zip"
+          "S3Key": "serverless/email-api-service/dev/1704487321778-2024-01-05T20:42:01.778Z/email-api-service.zip"
         },
         "Handler": "handler.sendEmail",
         "Runtime": "nodejs16.x",
@@ -180,14 +180,14 @@
         "SendEmailLogGroup"
       ]
     },
-    "SendEmailLambdaVersionAoKeaIU80Q2e27UMihk8GclHHbpPbcxRi8kn0uuMU": {
+    "SendEmailLambdaVersionqJkIuideDx7opIHGnLb1lIn78vaSv0iGoLsAARF9A": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SendEmailLambdaFunction"
         },
-        "CodeSha256": "GAo6AazUvpKpy5SnTbMA+3gJ4ANIGhSqFEhxJBDTlzA="
+        "CodeSha256": "jfQ6jbusPnk3gFu6/g81QzpUXmUfya0hI2GrfCWkKow="
       }
     },
     "ApiGatewayRestApi": {
@@ -308,7 +308,7 @@
         "SendEmailLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1704483587588": {
+    "ApiGatewayDeployment1704487314504": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -371,7 +371,7 @@
     "SendEmailLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SendEmailLambdaVersionAoKeaIU80Q2e27UMihk8GclHHbpPbcxRi8kn0uuMU"
+        "Ref": "SendEmailLambdaVersionqJkIuideDx7opIHGnLb1lIn78vaSv0iGoLsAARF9A"
       },
       "Export": {
         "Name": "sls-email-api-service-dev-SendEmailLambdaFunctionQualifiedArn"
