@@ -1,0 +1,19 @@
+service: email-api-service
+
+provider:
+  profile: training
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+
+functions:
+  sendEmail:
+    handler: handler.sendEmail
+    events:
+      - http:
+          path: send-email
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
