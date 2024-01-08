@@ -1,0 +1,31 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="../css/app.css">
+</head>
+<body>
+  <div id="calendar-events" class="events-container">
+    <% events.forEach(function(event) { %>
+  <div class="event-card">
+    <div class="event-header">
+      <h3><%= event.summary %></h3>
+    </div>
+    <div class="event-body">
+      <p class="event-date">
+        Date: 
+        <% if (event.start) { %>
+          <%= event.start.dateTime ? new Date(event.start.dateTime).toLocaleString() : (event.start.date ? new Date(event.start.date).toDateString() : 'No date available') %>
+        <% } else { %>
+          No start information
+        <% } %>
+      </p>
+      <p class="event-organizer">Organizer: <%= event.creator ? event.creator.email : 'No organizer information' %></p>
+      <a href="<%= event.htmlLink %>" target="_blank" class="event-link">View Event</a>
+    </div>
+  </div>
+<% }); %>
+  </div>
+</body>
+</html>

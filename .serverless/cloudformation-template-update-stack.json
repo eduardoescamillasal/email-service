@@ -134,6 +134,14 @@
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/email-api-service-dev*:*:*"
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ses:SendEmail",
+                    "ses:SendRawEmail"
+                  ],
+                  "Resource": "*"
                 }
               ]
             }
@@ -162,7 +170,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/email-api-service/dev/1704488030428-2024-01-05T20:53:50.428Z/email-api-service.zip"
+          "S3Key": "serverless/email-api-service/dev/1704754210252-2024-01-08T22:50:10.252Z/email-api-service.zip"
         },
         "Handler": "handler.sendEmail",
         "Runtime": "nodejs16.x",
@@ -180,14 +188,14 @@
         "SendEmailLogGroup"
       ]
     },
-    "SendEmailLambdaVersionKRTL6Lq8VXzXyzo86dcSU3KsmrVjVrGnSm8Z0d6oB0": {
+    "SendEmailLambdaVersion45AgvRfabPcPRJQZR2fkYXerOVdmxuJDkQa5wHNGw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SendEmailLambdaFunction"
         },
-        "CodeSha256": "2Vd8xf/Ul+KJmQ3rSja6iYOoSoMB7v6X5E6Yodkt1Vc="
+        "CodeSha256": "PXkeZ+GzoLieAODC/UP4syCQf5l5zdVctCmCtlrjEyo="
       }
     },
     "ApiGatewayRestApi": {
@@ -308,7 +316,7 @@
         "SendEmailLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1704488022217": {
+    "ApiGatewayDeployment1704754201471": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -371,7 +379,7 @@
     "SendEmailLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SendEmailLambdaVersionKRTL6Lq8VXzXyzo86dcSU3KsmrVjVrGnSm8Z0d6oB0"
+        "Ref": "SendEmailLambdaVersion45AgvRfabPcPRJQZR2fkYXerOVdmxuJDkQa5wHNGw"
       },
       "Export": {
         "Name": "sls-email-api-service-dev-SendEmailLambdaFunctionQualifiedArn"

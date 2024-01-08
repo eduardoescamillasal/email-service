@@ -10,6 +10,9 @@
 <body>
   <div class="form">
     <form action="http://localhost:3000/" method="POST">
+      <div class="google-title">
+        Google Calendar Bluepeople
+      </div>
       <a class="button" target="_blank" rel="noopener noreferrer"
 href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=189951011754-v2n2btu9gicvjd1v8pvpg4apvi2bepe1.apps.googleusercontent.com&redirect_uri=http://localhost:3000/&scope=https://www.googleapis.com/auth/calendar&access_type=offline&include_granted_scopes=true&state=true">Sign In</a>
       <span>You need to Sign In first</span><br><br>
@@ -19,11 +22,11 @@ href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=189
     </form>
     <hr>
     <form action="http://localhost:3000/events" method="POST">
-      <label for="attendee email">Attendee email</label>
+      <label for="attendee email">email</label>
       <input type="email" name="to" placeholder="send email to...">
-      <label for="event title">Event Title</label>
+      <label for="event title">Title</label>
       <input type="text" name="summary" placeholder="the title of event...">
-      <label for="body">Event body</label>
+      <label for="body">description</label>
       <input type="text" name="description" placeholder="the message body...">
       <input type="submit" value="Send Event Invite">
     </form>

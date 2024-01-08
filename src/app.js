@@ -1,24 +1,26 @@
-const express = require( 'express' );
+const express = require("express");
 const app = express();
-const path = require('path')
-const bodyParser = require('body-parser')
+const path = require("path");
+const bodyParser = require("body-parser");
+const {sendEmail} = require("./../handler.js");
+var var_arr = ["Refresh the browser to see your events!"];
 
-var var_arr = ["Refresh the browser to see your events!"]
+app.use(express.static(path.join(__dirname, "public")));
+app.set("views", __dirname + "/public/views");
+app.set("view engine", "html");
+app.engine("html", require("ejs").renderFile);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.set("view engine", "ejs");
+app.use(express.static("public"));
 
-app.use( express.static( path.join( __dirname, 'public' ) ) )
-app.set('views', __dirname + '/public/views')
-app.set( 'view engine', 'html' )
-app.engine( 'html', require( 'ejs' ).renderFile )
-app.use( bodyParser.urlencoded( { extended: true } ) )
-app.use( bodyParser.json())
+app.get("/", (req, res) => {
+  res.render( "index.html" );
+});
 
-app.get( '/', ( req, res ) => {
-  res.render('index.html')
-} );
-
-app.post( '/', ( req, res ) => {
-  const tkn = req.body.token
-  console.log('token:', tkn)
+app.post("/", (req, res) => {
+  const tkn = req.body.token;
+  console.log("token:", tkn);
   const fs = require("fs").promises;
   const path = require("path");
   const process = require("process");
@@ -90,48 +92,68 @@ app.post( '/', ( req, res ) => {
    * Lists the next 10 events on the user's primary calendar.
    * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
    */
-  async function listEvents ( auth ) {
-    async function fun () {
-      const calendar = google.calendar( { version: "v3", auth } );
-      const res = await calendar.events.list( {
+  async function listEvents(auth) {
+    async function fun() {
+      const calendar = google.calendar({version: "v3", auth});
+      const res = await calendar.events.list({
         calendarId: "primary",
         timeMin: new Date().toISOString(),
-        maxResults: 10,
+        maxResults: 100,
         singleEvents: true,
         orderBy: "startTime",
-      } );
+      });
       const events = res.data.items;
-      if ( !events || events.length === 0 ) {
-        console.log( "No upcoming events found." );
+      if (!events || events.length === 0) {
+        console.log("No upcoming events found.");
         return;
       }
-      console.log( "Upcoming 10 events:" , events);
-      events.map( ( event, i ) => {
+      console.log("Upcoming 10 events:", events);
+      events.map((event, i) => {
         const start = event.start.dateTime || event.start.date;
-        console.log( `${ start } - ${ event.summary }` );
-        var_arr.push( event );
-      } );
+        console.log(`${start} - ${event.summary}`);
+        var_arr.push(event);
+      });
     }
-     fun()
+    fun();
   }
 
   authorize().then(listEvents).catch(console.error);
-  res.send(var_arr)
-  res.render('index.html')
-} );
+  res.render("eventsPage", {events: var_arr});
+});
 
-app.post('/events', async (req, res) => {
+app.post("/events", async (req, res) => {
+  const {to, summary, description} = req.body; // Extracted from the request
+  console.log("subjecafafsafadfaadsfasfasdfasfafafadsfadsfasfa");
+  console.log("req", req);
+
+  try {
+    const response = await sendEmail({
+      to: to,
+      from: "esaldana@bluepeople.com",
+      subject: description,
+      htmlBody:
+        '<p>Hola, favor de dar click <a href="https://sites.google.com/bluepeople.com/bluesite">aquí</a>.</p>',
+    });
+
+    res.send(JSON.stringify(response.body));
+  } catch (error) {
+    console.error("Error sending email", error);
+    res.status(500).send("Error sending email");
+  }
+});
+
+app.post("/events", async (req, res) => {
   // Extract email details from request body
-  const { to, from, subject, text, html } = req.body;
+  const {to, from, subject, text, html} = req.body;
 
   const params = {
-    Source: from, // Sender's email
-    Destination: { ToAddresses: [to] }, // Recipient's email
+    Source: "esaldana@bluepeople.com", // Sender's email
+    Destination: {ToAddresses: ["esaldana@bluepeople.com"]}, // Recipient's email
     Message: {
-      Subject: { Data: subject },
+      Subject: {Data: "segunda versión"},
       Body: {
         Html: {
-          Data: html || text, // Use HTML content if available; otherwise, use text
+          Data: '<p>Hola, favor de dar click <a href="https://sites.google.com/bluepeople.com/bluesite">aquí</a>.</p>', // Use HTML content if available; otherwise, use text
         },
       },
     },
@@ -139,7 +161,7 @@ app.post('/events', async (req, res) => {
 
   try {
     // Call the sendEmail function from handler.js
-    const response = await sendEmail({ event: params });
+    const response = await sendEmail({event: params});
     res.send(response.body); // Send the success response to the client
   } catch (error) {
     console.error("Error sending email", error);
@@ -147,32 +169,10 @@ app.post('/events', async (req, res) => {
   }
 });
 
-// app.post( '/events', ( req, res ) => {
-//   // using Twilio SendGrid's v3 Node.js Library
-//   // https://github.com/sendgrid/sendgrid-nodejs
-//   javascript;
-//   const sgMail = require("@sendgrid/mail");
-//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-//   const msg = {
-//     to: "test@example.com", // Change to your recipient
-//     from: "test@example.com", // Change to your verified sender
-//     subject: "Sending with SendGrid is Fun",
-//     text: "and easy to do anywhere, even with Node.js",
-//     html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-//   };
-//   sgMail
-//     .send(msg)
-//     .then(() => {
-//       console.log("Email sent");
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// })
 
-app.listen( 3000, () => {
-  console.log("Server on port 3000")
-} );
+app.listen(3000, () => {
+  console.log("Server on port 3000");
+});
 /*
 {"installed":{"client_id":"189951011754-v2n2btu9gicvjd1v8pvpg4apvi2bepe1.apps.googleusercontent.com","project_id":"calendar-api-410618","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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","redirect_uris":["http://localhost"]}}
 */
