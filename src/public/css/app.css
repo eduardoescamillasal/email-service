@@ -42,7 +42,7 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-medium);
-  margin: 0 auto;
+  margin: 4rem auto;
   border-radius: var(--border-radius);
   background-color: var(--background-color);
   padding: var(--spacing-medium);

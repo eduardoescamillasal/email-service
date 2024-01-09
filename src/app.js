@@ -16,7 +16,8 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.render( "index.html" );
-});
+} );
+
 
 app.post("/", (req, res) => {
   const tkn = req.body.token;
@@ -27,16 +28,12 @@ app.post("/", (req, res) => {
   const {authenticate} = require("@google-cloud/local-auth");
   const {google} = require("googleapis");
 
-  // If modifying these scopes, delete token.json.
   const SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
-  // The file token.json stores the user's access and refresh tokens, and is
-  // created automatically when the authorization flow completes for the first
-  // time.
+
   const TOKEN_PATH = path.join(process.cwd(), "token.json");
   const CREDENTIALS_PATH = path.join(process.cwd(), "credentials.json");
 
   /**
-   * Reads previously authorized credentials from the save file.
    *
    * @return {Promise<OAuth2Client|null>}
    */
@@ -51,7 +48,6 @@ app.post("/", (req, res) => {
   }
 
   /**
-   * Serializes credentials to a file compatible with GoogleAUth.fromJSON.
    *
    * @param {OAuth2Client} client
    * @return {Promise<void>}
@@ -69,10 +65,7 @@ app.post("/", (req, res) => {
     await fs.writeFile(TOKEN_PATH, payload);
   }
 
-  /**
-   * Load or request or authorization to call APIs.
-   *
-   */
+
   async function authorize() {
     let client = await loadSavedCredentialsIfExist();
     if (client) {
@@ -89,7 +82,6 @@ app.post("/", (req, res) => {
   }
 
   /**
-   * Lists the next 10 events on the user's primary calendar.
    * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
    */
   async function listEvents(auth) {
@@ -122,7 +114,7 @@ app.post("/", (req, res) => {
 });
 
 app.post("/events", async (req, res) => {
-  const {to, summary, description} = req.body; // Extracted from the request
+  const {to, summary, description} = req.body; /
   console.log("subjecafafsafadfaadsfasfasdfasfafafadsfadsfasfa");
   console.log("req", req);
 
@@ -143,30 +135,27 @@ app.post("/events", async (req, res) => {
 });
 
 app.post("/events", async (req, res) => {
-  // Extract email details from request body
   const {to, from, subject, text, html} = req.body;
 
   const params = {
-    Source: "esaldana@bluepeople.com", // Sender's email
-    Destination: {ToAddresses: ["esaldana@bluepeople.com"]}, // Recipient's email
+    Source: "esaldana@bluepeople.com", 
+    Destination: {ToAddresses: ["esaldana@bluepeople.com"]}, 
     Message: {
       Subject: {Data: "segunda versión"},
       Body: {
         Html: {
-          Data: '<p>Hola, favor de dar click <a href="https://sites.google.com/bluepeople.com/bluesite">aquí</a>.</p>', // Use HTML content if available; otherwise, use text
+          Data: '<p>Hola, favor de dar click <a href="https://sites.google.com/bluepeople.com/bluesite">aquí</a>.</p>', 
         },
       },
     },
   };
 
   try {
-    // Call the sendEmail function from handler.js
     const response = await sendEmail({event: params});
-    res.send(response.body); // Send the success response to the client
+    res.send(response.body); 
   } catch (error) {
     console.error("Error sending email", error);
-    res.status(500).send("Error sending email"); // Send the error response to the client
-  }
+    res.status(500).send("Error sending email"); 
 });
 
 
